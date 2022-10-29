@@ -20,6 +20,6 @@ imgs = os.listdir('./imgs')
 if not os.path.isdir('./txts'):
     os.mkdir('./txts')
 for img in tqdm.tqdm(imgs):
-    convert = "jp2a imgs/{} --output=txts/{} --size=48x27".format(img, img.replace('png', 'txt'))
+    convert = "jp2a imgs/{} --output=txts/{} --size=80x45".format(img, img.replace('png', 'txt'))
     subprocess.run(convert, shell=True)
 
