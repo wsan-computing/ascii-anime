@@ -1,25 +1,46 @@
+#!/usr/bin/python3
+from shutil import rmtree
 import subprocess
 import os
 import sys
 import tqdm
+import argparse
 
-#filesave = input("Do you want to save files? [Y]/n: ")
-url = input("URL: ")
-dl_cmd = "yt-dlp {} -o video.mp4".format(url)
-dl = subprocess.run(dl_cmd, shell=True)
-if dl.returncode != 0:
-    sys.exit("something wrong")
+psr = argparse.ArgumentParser(
+    prog="ASCII Animation Generator",
+    usage="python3 create.py <OPTIONS>",
+    description="Generate ASCII animation from video file."
+)
+# psr.add_argument("-f", "--file", help="<path/to/video>")
+psr.add_argument("-i", "--input", required=True, help="<Video URL/Video Path>")
+psr.add_argument("-t", "--type", required=True, help="url/file")
+args = psr.parse_args()
 
-os.path.isdir('./imgs')
-if not os.path.isdir('./imgs'):
-    os.mkdir('./imgs')
+if os.path.isdir('./imgs'):
+    rmtree('./imgs')
+if os.path.isdir('./txts'):
+    rmtree('./txts')
+if os.path.isfile('./video.mp4'):
+    os.remove('./video.mp4')
 
-subprocess.run(["ffmpeg -i video.mp4 -vcodec png imgs/%07d.png"], shell=True)
+if args.type == "url":
+    dl_cmd = "yt-dlp {} -o video.mp4 -f mp4".format(args.input)
+    dl = subprocess.run(dl_cmd, shell=True)
+    if dl.returncode != 0:
+        sys.exit("something wrong")
+    fname = "video.mp4"
+elif args.type == "file":
+    fname = args.input
+else:
+    sys.exit("Please select correct type")
+
+os.mkdir('./imgs')
+strip = "ffmpeg -i {} -vf fps=30 -vcodec png imgs/%07d.png".format(fname)
+subprocess.run(strip, shell=True)
 imgs = os.listdir('./imgs')
 
-if not os.path.isdir('./txts'):
-    os.mkdir('./txts')
+os.mkdir('./txts')
 for img in tqdm.tqdm(imgs):
-    convert = "jp2a imgs/{} --output=txts/{} --size=80x45".format(img, img.replace('png', 'txt'))
+    convert = "jp2a imgs/{} --output=txts/{} --size=96x54".format(img, img.replace('png', 'txt'))
     subprocess.run(convert, shell=True)
 
