@@ -19,5 +19,8 @@ python3 play.py
 ```
 
 ## Requirements
-|OS|Windows(Using WSL)\nUbuntu|
-|Module|tqdm|
+
+| Item | Description |
+| --- | --- |
+| OS | Windows(Using WSL)<br>Ubuntu |
+| Module | tqdm |
