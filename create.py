@@ -20,10 +20,10 @@ if os.path.isdir('./imgs'):
     rmtree('./imgs')
 if os.path.isdir('./txts'):
     rmtree('./txts')
-if os.path.isfile('./video.mp4'):
-    os.remove('./video.mp4')
 
 if args.type == "url":
+    if os.path.isfile('./video.mp4'):
+        os.remove('./video.mp4')
     dl_cmd = "yt-dlp {} -o video.mp4 -f mp4".format(args.input)
     dl = subprocess.run(dl_cmd, shell=True)
     if dl.returncode != 0:
@@ -41,6 +41,6 @@ imgs = os.listdir('./imgs')
 
 os.mkdir('./txts')
 for img in tqdm.tqdm(imgs):
-    convert = "jp2a imgs/{} --output=txts/{} --size=96x54".format(img, img.replace('png', 'txt'))
+    convert = "jp2a imgs/{} --output=txts/{} --size=192x54".format(img, img.replace('png', 'txt'))
     subprocess.run(convert, shell=True)
 
